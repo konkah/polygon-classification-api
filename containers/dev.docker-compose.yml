@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  triangle-classification-api:
+    build:
+      context: ..
+      dockerfile: containers/Dev.Dockerfile
+    env_file:
+      - ../env/dev.env
+    volumes:
+      - ../src:/var/api/
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db-mysql
+
+  db-mysql:
+    image: mysql:8.0.30
+    restart: always
+    hostname: db-mysql
+    container_name: db-mysql
+    env_file:
+      - ../env/dev.env
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - ../db:/var/lib/mysql
