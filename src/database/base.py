@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(1, '/src')
 
-from src.database.triangle import Triangle
+from database.triangle import Triangle
 from os import environ
 
 from sqlmodel import create_engine, SQLModel, Session
