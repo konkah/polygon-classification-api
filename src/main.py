@@ -31,20 +31,21 @@ async def post_triangle(triangle: TriangleBase, session: AsyncSession = Depends(
         side2 = triangle.side2,
         side3 = triangle.side3,
     )
+
+    if triangle.side1 == triangle.side2 and triangle.side1 == triangle.side3:
+        triangle.type = "equilateral"
+
+    elif triangle.side1 == triangle.side2 or triangle.side1 == triangle.side3 or triangle.side2 == triangle.side3:
+        triangle.type = "isosceles"
+
+    else:
+        triangle.type = "scalene"
+
     session.add(triangle)
     session.commit()
     session.refresh(triangle)
 
-    if triangle.side1 == triangle.side2 and triangle.side1 == triangle.side3:
-        triangle_type = "equilateral"
-
-    elif triangle.side1 == triangle.side2 or triangle.side1 == triangle.side3 or triangle.side2 == triangle.side3:
-        triangle_type = "isosceles"
-
-    else:
-        triangle_type = "scalene"
-
-    return {"triangle type":triangle_type}
+    return {"triangle type":triangle.type}
 
 
 @app.get("/api/triangles")

@@ -9,3 +9,4 @@ class TriangleBase(SQLModel):
 
 class Triangle(TriangleBase, table=True):
 	id: int = Field(primary_key=True)
+	type: str
