@@ -64,6 +64,9 @@ db-follow-logs:
 api-bash:
 	@docker exec -it $$(docker ps --filter name=$(DOCKER_FOLDER_NAME)_$(DOCKER_API_SERVICE) -q) bash
 
+test-api:
+	@docker exec -it -w /var $$(docker ps --filter name=$(DOCKER_FOLDER_NAME)_$(DOCKER_API_SERVICE) -q) pytest
+
 db-connect:
 	@dbeaver -con "name=$(MYSQL_USER)|driver=mysql|host=$(MYSQL_HOST)|\
 	database=$(MYSQL_DATABASE)|openConsole=true|port=$(MYSQL_PORT)|user=$(MYSQL_USER)|\
