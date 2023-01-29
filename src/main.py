@@ -19,8 +19,8 @@ app = FastAPI()
 async def catch_exceptions_middleware(request: Request, call_next):
     try:
         return await call_next(request)
-    except Exception as e:
-        await save_log(e)
+    except Exception as exception:
+        await save_log(exception, "errors")
         return Response("Internal server error", status_code=500)
 
 app.middleware('http')(catch_exceptions_middleware)
@@ -57,6 +57,8 @@ async def post_triangle(triangle: TriangleBase, session: AsyncSession = Depends(
     session.commit()
     session.refresh(triangle)
 
+    await save_log(f"It's a Triangle: {triangle.side1}, {triangle.side2}, {triangle.side3}", "succeededs")
+
     return {"triangle type":triangle.type}
 
 
@@ -69,10 +71,9 @@ async def get_triangle(session: AsyncSession = Depends(get_session)):
     return result.scalars().all()
 
 
-async def save_log(message):
+async def save_log(message, log_stream):
     logs = boto3.client("logs")
     log_group = "triangle-classification-api-logs"
-    log_stream = "errors"
 
     timestamp = int(round(time.time() * 1000))
 
