@@ -1,9 +1,11 @@
+import time
 from typing import Optional
 from fastapi import Depends, FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 import sys
+import boto3
 
 from database.triangle import Triangle, TriangleBase
 sys.path.insert(1, '/src')
@@ -51,5 +53,25 @@ async def post_triangle(triangle: TriangleBase, session: AsyncSession = Depends(
 @app.get("/api/triangles")
 async def get_triangle(session: AsyncSession = Depends(get_session)):
     result = session.execute(select(Triangle))
+    await save_log()
 
     return result.scalars().all()
+
+
+async def save_log():
+    logs = boto3.client("logs")
+    log_group = "triangle-classification-api-logs"
+    log_stream = "errors"
+
+    timestamp = int(round(time.time() * 1000))
+
+    logs.put_log_events(
+        logGroupName = log_group,
+        logStreamName = log_stream,
+        logEvents = [
+            {
+                "timestamp":timestamp,
+                "message":"hello-world",
+            }
+        ]
+    )
