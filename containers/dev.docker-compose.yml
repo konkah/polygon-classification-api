@@ -11,7 +11,8 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db-mysql
+      db-mysql:
+        condition: service_healthy
 
   db-mysql:
     image: mysql:8.0.30
@@ -26,3 +27,7 @@ services:
       - '3306'
     volumes:
       - ../db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
