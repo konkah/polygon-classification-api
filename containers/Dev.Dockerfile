@@ -7,6 +7,8 @@ RUN apt update \
   && apt clean \
   && rm -rf /var/lib/apt/lists/*
 
+ENV PYTHONPATH /var/api
+
 WORKDIR /var/api
 COPY ./requirements.txt requirements.txt
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
