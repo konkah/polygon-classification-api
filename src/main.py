@@ -8,6 +8,7 @@ import sys
 import boto3
 
 from database.triangle import Triangle, TriangleBase
+from validations.triangle import set_triangle_type
 sys.path.insert(1, '/src')
 
 from database.base import init_db, get_session
@@ -44,14 +45,7 @@ async def post_triangle(triangle: TriangleBase, session: AsyncSession = Depends(
         side3 = triangle.side3,
     )
 
-    if triangle.side1 == triangle.side2 and triangle.side1 == triangle.side3:
-        triangle.type = "equilateral"
-
-    elif triangle.side1 == triangle.side2 or triangle.side1 == triangle.side3 or triangle.side2 == triangle.side3:
-        triangle.type = "isosceles"
-
-    else:
-        triangle.type = "scalene"
+    set_triangle_type(triangle)
 
     session.add(triangle)
     session.commit()
