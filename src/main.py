@@ -1,6 +1,6 @@
 import time
 from typing import Optional
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, Request, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
@@ -14,6 +14,16 @@ from database.base import init_db, get_session
 
 
 app = FastAPI()
+
+
+async def catch_exceptions_middleware(request: Request, call_next):
+    try:
+        return await call_next(request)
+    except Exception as e:
+        await save_log(e)
+        return Response("Internal server error", status_code=500)
+
+app.middleware('http')(catch_exceptions_middleware)
 
 
 @app.on_event("startup")
@@ -52,13 +62,14 @@ async def post_triangle(triangle: TriangleBase, session: AsyncSession = Depends(
 
 @app.get("/api/triangles")
 async def get_triangle(session: AsyncSession = Depends(get_session)):
+    # raise Exception("error") - Used to force an error
     result = session.execute(select(Triangle))
-    await save_log()
+    # await save_log("Success") - Used to send logs to AWS
 
     return result.scalars().all()
 
 
-async def save_log():
+async def save_log(message):
     logs = boto3.client("logs")
     log_group = "triangle-classification-api-logs"
     log_stream = "errors"
@@ -71,7 +82,7 @@ async def save_log():
         logEvents = [
             {
                 "timestamp":timestamp,
-                "message":"hello-world",
+                "message":str(message),
             }
         ]
     )
