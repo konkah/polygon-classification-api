@@ -1,13 +1,13 @@
 import sys
 sys.path.insert(1, '/src')
 
-from fastapi import Depends, FastAPI, Request, Response
+from fastapi import Depends, FastAPI, Request, Response, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from database.triangle import Triangle, TriangleBase
 from database.base import init_db, get_session
 from logs.aws import save_log
-from validations.triangle import set_triangle_type
+from validations.triangle import set_triangle_type, verify_triangle
 
 
 app = FastAPI()
@@ -40,6 +40,9 @@ async def post_triangle(triangle: TriangleBase, session: AsyncSession = Depends(
         side2 = triangle.side2,
         side3 = triangle.side3,
     )
+
+    if not verify_triangle(triangle):
+        raise HTTPException(status_code=400, detail="It's not a triangle")
 
     set_triangle_type(triangle)
 
