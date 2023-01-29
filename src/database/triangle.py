@@ -1,10 +1,11 @@
 from sqlmodel import SQLModel, Field
-
+from pydantic import PositiveInt
 
 class TriangleBase(SQLModel):
-	side1: int
-	side2: int
-	side3: int
+	id: int
+	side1: PositiveInt
+	side2: PositiveInt
+	side3: PositiveInt
 
 
 class Triangle(TriangleBase, table=True):
