@@ -1,17 +1,13 @@
-import time
-from typing import Optional
+import sys
+sys.path.insert(1, '/src')
+
 from fastapi import Depends, FastAPI, Request, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-
-import sys
-import boto3
-
 from database.triangle import Triangle, TriangleBase
-from validations.triangle import set_triangle_type
-sys.path.insert(1, '/src')
-
 from database.base import init_db, get_session
+from logs.aws import save_log
+from validations.triangle import set_triangle_type
 
 
 app = FastAPI()
@@ -63,21 +59,3 @@ async def get_triangle(session: AsyncSession = Depends(get_session)):
     # await save_log("Success") - Used to send logs to AWS
 
     return result.scalars().all()
-
-
-async def save_log(message, log_stream):
-    logs = boto3.client("logs")
-    log_group = "triangle-classification-api-logs"
-
-    timestamp = int(round(time.time() * 1000))
-
-    logs.put_log_events(
-        logGroupName = log_group,
-        logStreamName = log_stream,
-        logEvents = [
-            {
-                "timestamp":timestamp,
-                "message":str(message),
-            }
-        ]
-    )
