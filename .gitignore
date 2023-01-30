@@ -164,3 +164,7 @@ cython_debug/
 # Databases
 db/
 
+# Terraform
+.terraform/
+*.tfstate*
+*.lock.hcl
