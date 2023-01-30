@@ -2,6 +2,7 @@ import sys
 sys.path.insert(1, '/src')
 
 from fastapi import Depends, FastAPI, Request, Response, HTTPException
+from fastapi.exception_handlers import http_exception_handler
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from database.triangle import Triangle, TriangleBase
@@ -11,6 +12,12 @@ from validations.triangle import set_triangle_type, verify_triangle
 
 
 app = FastAPI()
+
+
+@app.exception_handler(HTTPException)
+async def custom_http_exception_handler(request, exc):
+    await save_log(exc.__dict__, "errors")
+    return await http_exception_handler(request, exc)
 
 
 async def catch_exceptions_middleware(request: Request, call_next):
