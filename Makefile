@@ -1,6 +1,12 @@
-.PHONY: build start finish api-print-logs api-bash test-api
+.PHONY: cloud-start cloud-finish build start finish api-print-logs api-bash test-api
 
 include env/dev.env
+
+cloud-start:
+	@cd terraform && terraform apply -var-file="../env/dev.tfvars" -auto-approve
+
+cloud-finish:
+	@cd terraform && terraform destroy -var-file="../env/dev.tfvars" -auto-approve
 
 build:
 	@docker build -t konkah/$(DOCKER_TAG) -f containers/$(DOCKER_FILE).Dockerfile .
