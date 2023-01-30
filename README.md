@@ -71,6 +71,16 @@ make test-api
 ```
 
 
+## Test Post Script
+A .sh script was created to manually test the input values on the 3 sides of the triangle.
+
+At the terminal,the command to run the script:
+
+```
+./test_post_url.sh
+```
+
+
 ## API Description
 
 The **FastAPI** framework provides automatic documentation from the created endpoints. It shows the default endpoints (GET, POST, etc) and Schemas, these being the request and response formats.
