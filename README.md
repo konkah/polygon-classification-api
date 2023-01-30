@@ -5,14 +5,20 @@ author: Karlos Helton Braga
 
 ## About the project
 
-The project is based on the creation of a native API to evaluate triangles in **Python** (**FastAPI**), returning its type. The project structure was created using **Docker** and **Docker Compose**, to create two machines: one for the API and one for the database (**MySQL**).
+The project is based on the creation of a native API to evaluate triangles in **Python** (**FastAPI**), returning its type. The project structure was created using **Terraform** for `AWS` Infra as Code. As well as using **Docker** and **Docker Compose**, to create two machines: one for the API and one for the local database (**MySQL**).
 
 Due to the use of many complex commands, **Make** has been included for ease of use. 
 
 
 ## Project Execution
 
-After clonning the project, use the following commands to run the entire project structure:
+After clonning the project, go to the env folder and duplicate the example files (`example.env`, `example.tfvars`) and rename then to dev files (`dev.env`, `dev.tfvars`). Then put the values required.
+
+Use the following commands to run the entire project structure:
+
+```
+make cloud-start
+```
 
 ```
 make build
@@ -34,10 +40,14 @@ The command to view the API machine error logs:
 make api-print-logs
 ```
 
-The command to stop the project:
+The commands to stop the project:
 
 ```
 make finish
+```
+
+```
+make cloud-finish
 ```
 
 
