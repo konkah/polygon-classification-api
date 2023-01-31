@@ -9,7 +9,7 @@ from urllib.parse import quote_plus as urlquote
 
 USER = environ.get("MYSQL_USER")
 PASS = urlquote(environ.get("MYSQL_PASSWORD"))
-HOST = environ.get("DOCKER_DB_SERVICE")
+HOST = environ.get("MYSQL_HOST")
 DB = environ.get("MYSQL_DATABASE")
 
 DATABASE_URL = f"mysql+pymysql://{USER}:{PASS}@{HOST}/{DB}"

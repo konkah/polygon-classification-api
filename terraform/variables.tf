@@ -12,3 +12,18 @@ variable "AWS_SECRET_ACCESS_KEY"{
   type     = string
   nullable = false
 }
+
+variable "RDS_DATABASE"{
+  type     = string
+  nullable = false
+}
+
+variable "RDS_USER"{
+  type     = string
+  nullable = false
+}
+
+variable "RDS_PASSWORD"{
+  type     = string
+  nullable = false
+}
