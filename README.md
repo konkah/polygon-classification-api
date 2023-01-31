@@ -5,7 +5,7 @@ author: Karlos Helton Braga
 
 ## About the project
 
-The project is based on the creation of a native API to evaluate triangles in **Python** (**FastAPI**), returning its type. The project structure was created using **Terraform** for `AWS` Infra as Code. As well as using **Docker** and **Docker Compose**, to create two machines: one for the API and one for the local database (**MySQL**).
+The project is based on the creation of a native API to evaluate triangles in **Python** (**FastAPI**), returning its type. The project structure was created using **Terraform** for `AWS` Infra as Code, it was created **CloudWatch** Logs (different streams for `succededs` and `errors`) and **MySQL** database using **RDS**. As well as using **Docker** and **Docker Compose**, to create one machine for the API.
 
 Due to the use of many complex commands, **Make** has been included for ease of use. 
 
