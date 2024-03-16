@@ -1,4 +1,5 @@
-.PHONY: cloud-start cloud-finish build start finish api-print-logs api-bash test-api
+.PHONY: cloud-start cloud-finish build start finish api-print-logs api-bash test-api \
+		kill-project rm-images
 
 include env/dev.env
 
@@ -26,3 +27,11 @@ test-api:
 finish:
 	@echo ">>>>> Remove containers $(DOCKER_FOLDER_NAME)"
 	@docker compose -f containers/dev.docker-compose.yml down --rmi local --remove-orphans
+
+kill-project:
+	@echo ">>>>> Remove containers and images"
+	@docker compose -f containers/dev.docker-compose.yml down --rmi local --remove-orphans
+
+rm-images:
+	@echo ">>>>> Remove images"
+	docker rmi -f $(docker-compose images -q)
