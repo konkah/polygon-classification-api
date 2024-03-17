@@ -1,6 +1,7 @@
 version: '3.8'
+
 services:
-  triangle-classification-api:
+  polygon-classification-api:
     build:
       context: ..
       dockerfile: containers/Dev.Dockerfile
