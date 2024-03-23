@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from database.triangle import Triangle, TriangleBase
 from database.base import init_db, get_session
-from logs.aws import save_log
+from logs.save_log import save_log
 from validations.triangle import set_triangle_type, verify_triangle
 
 

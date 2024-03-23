@@ -10,6 +10,7 @@ services:
     volumes:
       - ../../../development/src:/var/api/
       - ../../../development/tests:/var/testapi/
+      - ../../../outputs/logs/:/var/logs/
     ports:
       - "8000:8000"
     depends_on:
@@ -28,7 +29,7 @@ services:
       expose:
         - '3306'
       volumes:
-        - ../../../db:/var/lib/mysql
+        - ../../../outputs/databases/db:/var/lib/mysql
       healthcheck:
         test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
         timeout: 20s
