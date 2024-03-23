@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  polygon-classification-api:
+    build:
+      context: ../../..
+      dockerfile: architecture/local/containers/Dev.Dockerfile
+    env_file:
+      - ../../../env/dev.env
+    volumes:
+      - ../../../development/src:/var/api/
+      - ../../../development/tests:/var/testapi/
+    ports:
+      - "8000:8000"
+    depends_on:
+      db-mysql:
+        condition: service_healthy
+
+  db-mysql:
+      image: mysql:8.3.0
+      restart: always
+      hostname: db-mysql
+      container_name: db-mysql
+      env_file:
+        - ../../../env/dev.env
+      ports:
+        - '3307:3306'
+      expose:
+        - '3306'
+      volumes:
+        - ../../../db:/var/lib/mysql
+      healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+        timeout: 20s
+        retries: 10
