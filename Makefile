@@ -1,13 +1,25 @@
-.PHONY: cloud-start-aws cloud-finish-aws start finish api-print-logs api-bash test-api \
-		db-connect kill-project
+.PHONY: cloud-init-aws cloud-upgrade-aws cloud-plan-aws cloud-start-aws cloud-finish-aws \
+		start finish api-print-logs api-bash test-api db-connect kill-project
 
 include env/dev.env
 
+cloud-init-aws:
+	@cd architecture/cloud/terraform/aws && terraform init -reconfigure -lock=false
+
+cloud-upgrade-aws:
+	@cd architecture/cloud/terraform/aws && terraform init -upgrade
+
+cloud-plan-aws:
+	@cd architecture/cloud/terraform/aws && terraform validate -var-file="../../../../env/dev.tfvars"
+
+cloud-plan-aws:
+	@cd architecture/cloud/terraform/aws && terraform plan -var-file="../../../../env/dev.tfvars"
+
 cloud-start-aws:
-	@cd terraform && terraform apply -var-file="../../../../env/dev.tfvars" -auto-approve
+	@cd architecture/cloud/terraform/aws && terraform apply -var-file="../../../../env/dev.tfvars" -auto-approve
 
 cloud-finish-aws:
-	@cd terraform && terraform destroy -var-file="../../../../../env/dev.tfvars" -auto-approve
+	@cd architecture/cloud/terraform/aws && terraform destroy -var-file="../../../../env/dev.tfvars" -auto-approve
 
 start:
 	@docker compose -p $(DOCKER_PROJECT_NAME) -f architecture/local/containers/dev.docker-compose.yml up -d
