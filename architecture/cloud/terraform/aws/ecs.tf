@@ -16,6 +16,12 @@ resource "aws_ecs_task_definition" "polygon_task" {
           "hostPort": 8000
         }
       ],
+      "environment": [
+        {
+          "name": "MYSQL_HOST",
+          "value": "${aws_db_instance.mysql_rds.endpoint}"
+        }
+      ],
       "memory": 512,
       "cpu": 256
     }
@@ -50,11 +56,11 @@ resource "aws_iam_role_policy_attachment" "ecs_task_polygon_role_policy" {
 }
 
 resource "aws_ecs_service" "polygon_ecs_service" {
-  name            = "Polygon ECS Service"     # Name the service
+  name            = "Polygon-ecs-ervice"     # Name the service
   cluster         = "${aws_ecs_cluster.polygon_cluster.id}"   # Reference the created Cluster
   task_definition = "${aws_ecs_task_definition.polygon_task.arn}" # Reference the task that the service will spin up
   launch_type     = "FARGATE"
-  desired_count   = 3 # Set up the number of containers to 3
+  desired_count   = 1 # Set up the number of containers to 3
 
   load_balancer {
     target_group_arn = "${aws_lb_target_group.polygon_lb_target_group.arn}" # Reference the target group

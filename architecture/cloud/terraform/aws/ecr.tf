@@ -1,5 +1,6 @@
 resource "aws_ecr_repository" "polygon_container_hub" {
     name = "polygon-container-hub"
+	force_delete = true
 
     image_scanning_configuration {
 	    scan_on_push = true
@@ -38,8 +39,6 @@ resource "null_resource" "docker_packaging" {
 		aws configure set aws_secret_access_key ${var.AWS_SECRET_ACCESS_KEY}
 		aws configure set region ${var.AWS_DEFAULT_REGION}
 	    aws ecr get-login-password --region ${var.AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.AWS_DEFAULT_REGION}.amazonaws.com
-	    pwd
-		ls ../../..
 		docker build -t "${aws_ecr_repository.polygon_container_hub.repository_url}:latest" -f ../../containers/Prod.Dockerfile ../../../..
 	    docker push "${aws_ecr_repository.polygon_container_hub.repository_url}:latest"
 	    EOF
