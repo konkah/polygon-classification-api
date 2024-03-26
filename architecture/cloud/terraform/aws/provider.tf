@@ -12,3 +12,7 @@ provider "aws" {
   secret_key = var.AWS_SECRET_ACCESS_KEY
   region = var.AWS_DEFAULT_REGION
 }
+
+// Used by get the current aws number account.
+data "aws_caller_identity" "current" {
+}

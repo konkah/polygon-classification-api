@@ -2,8 +2,8 @@ resource "aws_db_instance" "mysql_rds" {
   allocated_storage    = 10
   db_name              = var.RDS_DATABASE
   engine               = "mysql"
-  engine_version       = "8.0.30"
-  instance_class       = "db.t2.micro"
+  engine_version       = "8.0.36"
+  instance_class       = "db.t3.micro"
   username             = var.RDS_USER
   password             = var.RDS_PASSWORD
   # parameter_group_name = "default.mysql8.0"
