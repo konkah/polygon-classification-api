@@ -4,6 +4,7 @@ resource "aws_ecs_cluster" "polygon_cluster" {
 
 resource "aws_ecs_task_definition" "polygon_task" {
   family                   = "polygon-task" # Name your task
+  # ${aws_db_instance.mysql_rds.endpoint}
   container_definitions    = <<DEFINITION
   [
     {
@@ -19,7 +20,27 @@ resource "aws_ecs_task_definition" "polygon_task" {
       "environment": [
         {
           "name": "MYSQL_HOST",
-          "value": "${aws_db_instance.mysql_rds.endpoint}"
+          "value": "x" 
+        },
+        {
+          "name": "MYSQL_PORT",
+          "value": "3306"
+        },
+        {
+          "name": "MYSQL_DATABASE",
+          "value": "${var.RDS_DATABASE}"
+        },
+        {
+          "name": "MYSQL_USER",
+          "value": "${var.RDS_USER}"
+        },
+        {
+          "name": "MYSQL_PASSWORD",
+          "value": "${var.RDS_PASSWORD}"
+        },
+        {
+          "name": "PROFILE_NAME",
+          "value": "${var.PROFILE_NAME}"
         }
       ],
       "memory": 512,

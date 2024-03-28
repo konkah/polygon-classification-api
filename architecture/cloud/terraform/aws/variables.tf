@@ -43,3 +43,8 @@ variable "UNTAGGED_IMAGES"{
   nullable = false
   default = 1
 }
+
+variable "PROFILE_NAME"{
+  type    = string
+  nullable = false
+}

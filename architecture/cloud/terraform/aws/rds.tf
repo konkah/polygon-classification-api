@@ -1,3 +1,4 @@
+/*
 resource "aws_db_instance" "mysql_rds" {
   allocated_storage    = 10
   db_name              = var.RDS_DATABASE
@@ -16,6 +17,7 @@ output "rds_endpoint" {
   value = "${aws_db_instance.mysql_rds.endpoint}"
 }
 
+
 resource "aws_security_group" "mysql_rds_security" {
   name = "mysql-rds-security"
 
@@ -33,3 +35,4 @@ resource "aws_security_group" "mysql_rds_security" {
       cidr_blocks = ["0.0.0.0/0"]
   }
 }
+*/
