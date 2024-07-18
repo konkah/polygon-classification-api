@@ -1,5 +1,5 @@
-.PHONY: cloud-init-aws cloud-upgrade-aws cloud-plan-aws cloud-start-aws cloud-finish-aws \
-		start finish api-print-logs api-bash test-api db-connect kill-project
+.PHONY: cloud-init-aws cloud-upgrade-aws cloud-validate-aws cloud-plan-aws cloud-start-aws \
+		cloud-finish-aws start finish api-print-logs api-bash test-api db-connect kill-project
 
 include env/dev.env
 
@@ -9,7 +9,7 @@ cloud-init-aws:
 cloud-upgrade-aws:
 	@cd architecture/cloud/terraform/aws && terraform init -upgrade
 
-cloud-plan-aws:
+cloud-validate-aws:
 	@cd architecture/cloud/terraform/aws && terraform validate -var-file="../../../../env/dev.tfvars"
 
 cloud-plan-aws:

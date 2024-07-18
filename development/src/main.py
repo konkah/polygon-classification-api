@@ -5,9 +5,11 @@ from fastapi import Depends, FastAPI, Request, Response, HTTPException
 from fastapi.exception_handlers import http_exception_handler
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from database.square import Square, SquareBase
 from database.triangle import Triangle, TriangleBase
 from database.base import init_db, get_session
 from logs.save_log import save_log
+from validations.square import set_square_type, verify_square
 from validations.triangle import set_triangle_type, verify_triangle
 
 
@@ -66,6 +68,38 @@ async def post_triangle(triangle: TriangleBase, session: AsyncSession = Depends(
 async def get_triangle(session: AsyncSession = Depends(get_session)):
     # raise Exception("error") - Used to force an error
     result = session.execute(select(Triangle))
+    # await save_log("Success") - Used to send logs to AWS
+
+    return result.scalars().all()
+
+
+@app.post("/api/squares")
+async def post_square(square: SquareBase, session: AsyncSession = Depends(get_session)):
+    square = Square(
+        side1 = square.side1,
+        side2 = square.side2,
+        side3 = square.side3,
+        side4 = square.side4,
+    )
+
+    if not verify_square(square):
+        raise HTTPException(status_code=400, detail="It's not a square")
+
+    set_square_type(square)
+
+    session.add(square)
+    session.commit()
+    session.refresh(square)
+
+    await save_log(f"It's a Square: {square.side1}, {square.side2}, {square.side3}", "succeededs")
+
+    return {"square type":square.type}
+
+
+@app.get("/api/squares")
+async def get_square(session: AsyncSession = Depends(get_session)):
+    # raise Exception("error") - Used to force an error
+    result = session.execute(select(Square))
     # await save_log("Success") - Used to send logs to AWS
 
     return result.scalars().all()
